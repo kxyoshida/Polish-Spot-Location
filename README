@@ -1,0 +1,14 @@
+An ImageJ plugin that reads results table of spot locations and fit a 2-d
+gaussian function to each of the image stack of the spots. 
+
+The plugin calls MP2DGauss.c through Java Native Interface.
+
+Requires to import libraries:
+
+- MPFIT: A MINPACK-1 Least Squares Fitting Library in C
+http://www.physics.wisc.edu/~craigm/idl/cmpfit.html
+
+- commons math library http://commons.apache.org/math/
+
+Directory containing Results Tables roughly specifying the centroids of the
+spots per image frame should be located as "Input folder".

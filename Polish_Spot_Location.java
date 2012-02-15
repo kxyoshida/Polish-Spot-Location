@@ -87,6 +87,13 @@ public class Polish_Spot_Location implements PlugInFilter {
 	}
     }
 
+    boolean withinCircle(double x, double y) {
+	if ( (x-hw+1)*(x-hw+1)+(y-hw+1)*(y-hw+1)<=hw*hw ) 
+	    return true; 
+	else 
+	    return false;
+    }
+
     private void guessParams(double[] x, double[] y, double[] g, params par) 
     {
 	DescriptiveStatistics ds = new DescriptiveStatistics(g);
@@ -97,15 +104,19 @@ public class Polish_Spot_Location implements PlugInFilter {
 	par.a[1] = (par.a[1]>1.0)? par.a[1] : 1.0;
 
 	for (int i=0; i<x.length; i++) {
-	    sumx += x[i]*g[i];
-	    sumy += y[i]*g[i];
+	    if (withinCircle(x[i], y[i])) {  // restriction added on 14 Feb 2012
+		sumx += x[i]*g[i];
+		sumy += y[i]*g[i];
+	    }
 	}
 	par.a[2] = sumx/ds.getSum();
 	par.a[3] = sumy/ds.getSum();
 	double sumsqx = 0, sumsqy =0;
 	for (int i=0; i<x.length; i++) {
-	    sumsqx += (x[i]-par.a[2])*(x[i]-par.a[3])*g[i];
-	    sumsqy += (y[i]-par.a[3])*(y[i]-par.a[3])*g[i];
+	    if (withinCircle(x[i], y[i])) {    // restriction added on 14 Feb 2012
+		sumsqx += (x[i]-par.a[2])*(x[i]-par.a[3])*g[i];
+		sumsqy += (y[i]-par.a[3])*(y[i]-par.a[3])*g[i];
+	    }
 	}
 	par.a[4] = par.a[5] = Math.sqrt(0.5*(sumsqx+sumsqy)/ds.getSum());
 	return;

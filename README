@@ -12,3 +12,7 @@ http://www.physics.wisc.edu/~craigm/idl/cmpfit.html
 
 Directory containing Results Tables roughly specifying the centroids of the
 spots per image frame should be located as "Input folder".
+
+(14 Feb 2012)
+- In guessparams(), calculation of moments is now constrained within radius of hw pixels.
+

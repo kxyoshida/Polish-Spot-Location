@@ -216,7 +216,7 @@ public class Polish_Spot_Location implements PlugInFilter {
 	return;
     }
 
-    private void fillResultsTable(ResultsTable rt, int slice, int tr) {
+    private void fillResultsTable(ResultsTable rt, int slice, int tr, int tag) {
 	if (tr >= 0 && tr < rt.getCounter()) {
 	    rt.setValue("slice", tr, slice);
 	    rt.setValue("cx", tr, 0);
@@ -227,7 +227,7 @@ public class Polish_Spot_Location implements PlugInFilter {
 	    rt.setValue("peak", tr, 0);
 	    rt.setValue("chisq", tr, 0);
 	    rt.setValue("dof", tr, 0);
-	    rt.setValue("status", tr, -1);
+	    rt.setValue("status", tr, tag);
 	} else {
 	    IJ.log("No corresponding rows in Results Tabe.");
 	}
@@ -305,7 +305,12 @@ public class Polish_Spot_Location implements PlugInFilter {
 			return;
 		    }
 		    par.recallParams();
-		    fixResultsTable(rt, n, i, par, status);
+		    if (par.a[2]!=0 && par.a[2]!=2*hw && par.a[3]!=0 && par.a[3]!=2*hw) 
+			fixResultsTable(rt, n, i, par, status);
+		    else 
+			fillResultsTable(rt, n, i, -2);	
+		    // tag it with -2 if the estimated centre comes to lie on the boundary
+
 		    if (status>=1 && status<=8) {
 			if (logging) {
 			    for (int j = 0; j < 7; j++) 
@@ -314,7 +319,7 @@ public class Polish_Spot_Location implements PlugInFilter {
 			}
 		    } 
 		} else {
-		    fillResultsTable(rt, n, i);
+		    fillResultsTable(rt, n, i, -1);
 		}
 	    }
 	    rt.show("Results");
